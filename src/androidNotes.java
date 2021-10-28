@@ -5,6 +5,7 @@ public class androidNotes
 	//Using Android Studio 4.2, Java and Android Jet (2021, eBookFrenzy) - libgen.li
 	
 	//START UP AT : PAGE 74
+	//MAriah
 	
 	/*
 	 * Activity: 
