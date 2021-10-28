@@ -6,7 +6,7 @@ public class androidNotes
 	
 	//START UP AT : PAGE 74
 	//MAriah
-	
+	//Boofy bear
 	/*
 	 * Activity: 
 	 * 
