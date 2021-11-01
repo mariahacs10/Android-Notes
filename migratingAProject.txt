@@ -1,0 +1,43 @@
+11.8 Migrating a Project to View Binding
+-----------------------------------------------------
+
+The process for converting a project module 
+to use view binding involves the following steps:
+
+1.  Edit the module level Gradle build script file listed in the Project tool window as Gradle Scripts -> build.
+gradle (Module: <project name>.app) where <project name> is the name of the project (for example
+AndroidSample).
+
+2.  Locate the android section of the file and add an entry to enable the viewBinding property as follows:
+android {
+.
+.
+buildFeatures {
+viewBinding true
+}
+
+3.  Click on the Sync Now link at the top of the editor to resynchronize the project with these new build settings.
+4.  Edit the MainActivity.kt file and modify it to read as follows (where <reverse domain> represents the domain
+name used when the project was created and <project name> is replaced by the lowercase name of the
+project, for example androidsample) and <binding name> is the name of the binding for the corresponding
+layout resource file (for example the binding for activity_main.xml is ActivityMainBinding).
+.
+.
+    import android.view.View;
+    import com.<reverse domain>.<project name>.databinding.<binding name>;
+
+    public class MainActivity extends AppCompatActivity {
+    private <binding name> binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+    super.onCreate(savedInstanceState);
+
+    binding = <binding name>.inflate(getLayoutInflater());
+
+    View view = binding.getRoot();
+
+     setContentView(view);
+}
+5.  Access views by name as properties of the binding object.
