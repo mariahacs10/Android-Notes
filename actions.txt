@@ -1,0 +1,18 @@
+Actions:
+ A way of telling Android what standard operations activities
+ can perfom. As an example, Android knows that all activities
+ registered for a send action are capable of sending messages.
+
+Create an intent that specifies an action:
+ Intent intent = new Intent(this, ReceiveMessageActivity.class);
+ 
+ **This intent is an example of an explicit intent; 
+ you explicitly tell Android which class you want it to run.**
+
+Implicit intent:
+   An action you want done but you don’t care which
+   activity does it, you  create an implicit intent.
+
+  
+
+
