@@ -22,6 +22,32 @@ How to create an intent to access a outside application:
  Create an intent that specifies you want to send a message:
  Intent intent = new Intent(Intent.ACTION_SEND);
 
+**Adding extra information**:
+ 
+  Once you’ve specified the action you want to use, 
+  you can add extra information to it. We want to pass some text
+  with the intent that will form the body of the message we’re 
+  sending. To do this, you use the following lines of code:
+  
+  intent.setType("text/plain"); 
+  intent.putExtra(Intent.EXTRA_TEXT, messageText);
+
+ You want the activity to be able to handle data with a 
+ MIME data-type of text/plain, and also tells it what the text is.
+
+**putExtra()** method:
+   
+   You can make extra calls to the putExtra() method if there’s 
+   additional information you want to add. 
+   As an example, if you want to specify the subject
+   of the message, you can use:
+
+       intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+   
+    where subject is the subject of the message.
+
+Pick up at 112
+
 
 
   
