@@ -46,6 +46,10 @@ How to create an intent to access a outside application:
    
     where subject is the subject of the message.
 
+****Adds an action to an intent filter. 
+An <intent-filter> element must contain one or 
+more <action> elements.*****
+
 Pick up at 112
 
 
