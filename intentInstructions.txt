@@ -1,3 +1,7 @@
+****Adds an action to an intent filter. 
+An <intent-filter> element must contain one or 
+more <action> elements.*****
+
 Intent, Whenever you want an activity to start a second activity, you use an intent.
 
 You can think of an intent as an “intent to do something.” It’s a type of
@@ -25,7 +29,3 @@ How to create an intent to access a outside application:
  Intent.ACTION_SEND to send a message. 
  Create an intent that specifies you want to send a message:
  Intent intent = new Intent(Intent.ACTION_SEND);*****
-
-****Adds an action to an intent filter. 
-An <intent-filter> element must contain one or 
-more <action> elements.*****
