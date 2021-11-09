@@ -1,0 +1,42 @@
+
+When you use an implicit intent, Android uses the information in the
+intent to figure out which components are able to receive it. It does this
+by checking the intent filters in every app’s copy of AndroidManifest.xml.
+
+
+intent filter:
+
+specifies what types of intent each component can
+receive. As an example, here’s the entry for an activity that can handle
+an action of ACTION_SEND. The activity is able to accept data with
+MIME types of text/plain or image:
+
+<intent-filter>
+
+(Even though the book says android.intent.category.DEFAULT
+ in 2021 it is using android.intent.category.LAUNCHER)
+
+<action android:name="android.intent.action.SEND"/>
+<category android:name="android.intent.category.LAUNCHER"/>
+<data android:mimeType="text/plain"/>
+<data android:mimeType="image/*"/>
+
+</intent-filter>
+
+*******IMPORTANT!*******
+
+The intent filter also specifies a category. 
+An intent filter must include a category of:
+
+****android.intent.category. LAUNCHER****
+
+if it’s to receive implicit intents. If an activity has no intent filter,
+or it doesn’t include a category name of:
+
+android.intent. category.LAUNCHER
+
+it means that the activity can’t be started with an implicit intent.
+It can only be started with an explicit intent using the full name
+(including the package) of the component.
+
+
