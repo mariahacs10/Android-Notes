@@ -2,6 +2,16 @@
 An <intent-filter> element must contain one or 
 more <action> elements.*****
 
+---Intent resolution---
+
+ Android is given an intent, it has to figure out which activity, or
+ activities, can handle it.
+
+When you use an implicit intent, Android uses the information in the
+intent to figure out which components are able to receive it. It does this
+by checking the intent filters in every app’s copy of AndroidManifest.xml.
+
+
 Intent, Whenever you want an activity to start a second activity, you use an intent.
 
 You can think of an intent as an “intent to do something.” It’s a type of
