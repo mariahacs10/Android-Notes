@@ -1,2 +1,0 @@
-You can find the resource manager on the leftSide panel 
-underneath the Project

@@ -1,0 +1,36 @@
+1. First create a new empty Activity 
+
+2.Open the MainActivity.java class and add:
+
+public void launchIntent(View view)
+{	 
+  //This is implict intent that will launch a browser
+  //outside of your app
+   Intent intent = new Intent(Intent.ACTION_VIEW);
+   intent.setData(Uri.parse("Any youtube or google link"
+  startActivity(intent)
+}
+
+3.Open the activity_main.xml file and replace
+the TextView with the Button
+(BTW you do NOT need to replace the textView 
+with a button you can replace it with anything
+i am just following the example of page 16)
+
+<Button
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" 
+  android:text="Launch Browser"
+  android:id="@+id/button"
+  android:onClick="launchIntent"
+  app:layout_constraintRight_toRightOf="parent"
+  app:layout_constraintBottom_toBottomOf="parent"
+  app:layout_constraintLeft_toLeftOf="parent"
+  app:layout_constraintTop_toTopOf="parent"/>
+
+Then you can run and it will launch!
+ 
+
+
+
+	
