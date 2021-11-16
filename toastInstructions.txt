@@ -1,0 +1,39 @@
+Video link:https:
+//www.youtube.com/watch?v=7CPHaMWbZhI
+
+Step 1.
+Go into the mainActivity and add
+Toast toast = Toast.makeText(MainActivity.this, "Sending a message.....", Toast.LENGTH_LONG);
+toast.show();
+
+(And rember to add the toast.show())
+
+If you want the if statment do this
+
+Step 1.
+Go Into the mainActivity and add
+
+messageView.setOnClickListener(new View.onClickListener()){
+
+Step 2.
+Then add this method
+
+@Override 
+public void onClick(View v){
+
+Step 3.
+Add a if and else statment
+if(!messageView.getText().toString().isEmpty()){
+	Toast toast = Toast.makeText(MainActivity.this, "Sending a message.....", Toast.LENGTH_LONG);
+              toast.show();
+else
+{
+	Toast toast = Toast.makeText(MainActivity.this, "Please enter text", Toast.LENGTH_LONG);
+          toast.show();
+}
+}
+});
+
+Then Thats it your done!
+
+CALIFORNIA FOREVER GOODBYE 😉
