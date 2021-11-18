@@ -1,0 +1,18 @@
+Links for snackbar:
+https://www.youtube.com/watch?v=8s36ik_ox0I(custom)
+https://www.youtube.com/watch?v=NmfUE2tRoag
+https://stackoverflow.com/questions/34432339/android-snackbar-vs-toast-usage-and-difference
+
+Snackbar in android is a new widget introduced 
+with the Material Design library as a replacement 
+of a Toast messages. and Snackbar android
+widget may contain an optional action button.
+
+1.Create a snackbar
+Snackbar snackbar = Snackbar
+
+2.Use the .make() method
+Snackbar snackbar = Snackbar.make(v, "Text", Snackbar.LENGTH(short or long)
+
+3.Use the show() method
+snackbar.show
