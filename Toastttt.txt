@@ -1,0 +1,119 @@
+Step 1. Create a Activity
+
+Step 2. Open the activity_main and write:
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+  <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="109dp"
+        android:layout_marginLeft="109dp"
+        android:layout_marginTop="84dp"
+        android:ems="10"
+        android:hint="@string/name"
+        android:inputType="textPersonName"
+        android:minHeight="48dp" />
+
+ <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="220dp"
+        android:text="Submit" />
+</RelativeLayout>
+
+Step 3. Go to java - new - activity - empty Activity
+
+Step 4. Go to the Main Activity and write:
+
+ ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("First Activity");
+        name = (EditText) findViewById(R.id.editTextName);
+
+ submit = (Button) findViewById(R.id.buttonSubmit);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+ if(!name.getText() .toString() .isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Thank you " + name.getText(), Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this, "Please enter a name :-(", Toast.LENGTH_LONG).show();
+                }
+
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("Name", name.getText().toString());
+                startActivity(intent);
+            }
+        });
+    }
+}
+
+Step 5. Go to the activity_second.xml and write:
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SecondActivity"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/resultTv"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
+
+Step 6. Go to the Second Activity and write:
+
+package com.example.application.toastmessage;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+public class SecondActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Second Activity");
+
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("Name");
+
+        TextView mResultTv = findViewById(R.id.resultTv);
+
+        mResultTv.setText("Name: " + name);
+    }
+}
+
+Step 7. Run it And It'll Work ! 😊
