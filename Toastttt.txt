@@ -39,6 +39,10 @@ Step 3. Go to java - new - activity - empty Activity
 
 Step 4. Go to the Main Activity and write:
 
+At the top add
+ EditText name;
+Button submit;
+
  ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("First Activity");
         name = (EditText) findViewById(R.id.editTextName);
