@@ -116,7 +116,7 @@ public class SecondActivity extends AppCompatActivity {
 
         TextView mResultTv = findViewById(R.id.resultTv);
 
-        mResultTv.setText("Name: " + name);
+        mResultTv.setText(name);
     }
 }
 
