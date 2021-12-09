@@ -1,0 +1,12 @@
+To do a basic notification:
+
+Do this:
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "My Notification");
+                builder.setContentTitle("Click This Notification");
+                builder.setContentText("Ee");
+                builder.setSmallIcon(R.drawable.ic_launcher_background);
+                builder.setAutoCancel(true);
+;
+                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);
+                managerCompat.notify(1, builder.build());
