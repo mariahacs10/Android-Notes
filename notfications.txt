@@ -23,6 +23,7 @@ notification channel performs no operation.
 
 Open Activity activity_main and write:
 
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -50,30 +51,31 @@ Open Activity activity_main and write:
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send on Channel 1"
-       />
+        android:onClick="sendOnChannel1"
+        />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send on Channel 2"
+        android:onClick="sendOnChannel2"
         />
 </LinearLayout>
 
 
-Open MainActivity and write:
 
- import androidx.appcompat.app.AppCompatActivity;
+Open MainActivity and write:
+package com.example.application.notifcation;
+
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
@@ -81,10 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private NotificationManagerCompat notificationManager;
     private EditText editTextTitle;
     private EditText editTextMessage;
-    public static final String CHANNEL_1_ID = "channel1";
-    public static final String CHANNEL_2_ID = "channel2";
-    Button button1a;
-    Button button2a;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,75 +92,38 @@ public class MainActivity extends AppCompatActivity {
         notificationManager = NotificationManagerCompat.from(this);
         editTextMessage = findViewById(R.id.edit_text_message);
         editTextTitle = findViewById(R.id.edit_text_title);
-        button1a = findViewById(R.id.button1);
-        button2a = findViewById(R.id.button2);
 
-        button1a.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String title = editTextTitle.getText().toString();
-                String message = editTextMessage.getText().toString();
-
-                Notification notification = new NotificationCompat.Builder(MainActivity.this, CHANNEL_1_ID)
-                        .setSmallIcon(R.drawable.ic_one)
-                        .setContentTitle(title)
-                        .setContentText(message)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                        .build();
-
-                notificationManager.notify(1, notification);
-            }
-        });
-
-        button2a.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String title = editTextTitle.getText().toString();
-                String message = editTextMessage.getText().toString();
-
-
-                Notification notification = new NotificationCompat.Builder(MainActivity.this, CHANNEL_2_ID)
-                        .setSmallIcon(R.drawable.ic_two)
-                        .setContentTitle(title)
-                        .setContentText(message)
-                        .setPriority(NotificationCompat.PRIORITY_LOW)
-                        .build();
-
-                notificationManager.notify(2, notification);
-            }
-        });
-
-        createNotificationChannels();
     }
 
-    private void createNotificationChannels() {
-        NotificationChannel channel1 = new NotificationChannel(
-                CHANNEL_1_ID,
-                //This is going to be displayed in the notification
-                //so call it something that is relative to the notification
-                "Channel 1",
-                //Define the import / How importation  the notifacation
-                NotificationManager.IMPORTANCE_HIGH
-        );
-        //Once you call the channel1 varaible dot you will see tones of options to how to display the notification
-        channel1.setDescription("This is Channel 1");
+    public void sendOnChannel1(View v)
+    {
+        String title = editTextTitle.getText().toString();
+        String message = editTextMessage.getText().toString();
 
-        NotificationChannel channel2 = new NotificationChannel(
-                CHANNEL_2_ID,
-                //This is going to be displayed in the notification
-                //so call it something that is relative to the notification
-                "Channel 2",
-                //Define the import / How importation  the notifacation
-                NotificationManager.IMPORTANCE_LOW
-        );
-        //Once you call the channel2 varaible dot you will see tones of options to how to display the notification
-        channel2.setDescription("This is Channel 2");
+        Notification notification = new NotificationCompat.Builder(this, App.CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_one)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
 
-        NotificationManager manager = getSystemService(NotificationManager.class);
-        manager.createNotificationChannel(channel1);
-        manager.createNotificationChannel(channel2);
+        notificationManager.notify(1, notification);
+    }
+
+    public void sendOnChannel2(View v)
+    {
+        String title = editTextTitle.getText().toString();
+        String message = editTextMessage.getText().toString();
+
+        Notification notification = new NotificationCompat.Builder(this, App.CHANNEL_2_ID)
+                .setSmallIcon(R.drawable.ic_two)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(Notification.PRIORITY_LOW)
+                .build();
+
+        notificationManager.notify(2, notification);
     }
 }
 
