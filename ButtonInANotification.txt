@@ -1,3 +1,7 @@
+
+**Video i used:
+https://www.youtube.com/watch?v=CZ575BuLBo4**
+
 1. Create a activity called NotificationReceiver and write:
 
 package com.example.application.notificationexample2;
