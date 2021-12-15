@@ -58,13 +58,15 @@ Intent intent = new Intent(MainActivity.this, MainActivity2.class);
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send on Channel 1"
-        android:onClick="sendOnChannel1"/>
+        android:id="your id"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Send on Channel 2"
-        android:onClick="sendOnChannel2"/>
+android:id="your id" 
+      />
+
 </LinearLayout>
 
 4. In the MainActivity write

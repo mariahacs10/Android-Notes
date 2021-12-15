@@ -1,0 +1,148 @@
+1. create a Activty: MainActivty
+
+2.Create another activity called: SecondActivity
+
+3. Go to the activity_main file and write:
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:id="@+id/coordinatorLayout">
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Launch 2 activity"
+        android:layout_gravity="center" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+4. Open the MainActivity and write:
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
+
+public class MainActivity extends AppCompatActivity {
+
+    CoordinatorLayout coordinatorLayout;
+    Button button;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        coordinatorLayout = findViewById(R.id.coordinatorLayout);
+        button = findViewById(R.id.button);
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity2();
+            }
+        });
+    }
+    public void openActivity2()
+    {
+        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+        startActivity(intent);
+        Snackbar.make(coordinatorLayout, "Launching 2 activity...", Snackbar.LENGTH_LONG)
+                .setTextColor(Color.BLACK)
+                .setBackgroundTint(Color.YELLOW);
+    }
+}
+
+5. go to the activity_second:
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SecondActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Happy thanksgiving and enjoy your week 🦃"
+        android:textSize="40sp"/>
+
+</RelativeLayout>
+
+6. Open The SecondActivity and write:
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
+
+public class SecondActivity extends AppCompatActivity {
+
+    TextView textView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Second Activity");
+
+        Intent intent = getIntent();
+
+        textView = findViewById(R.id.textView);
+
+
+                Snackbar snackbar = Snackbar.make(textView, "Second activity launched", Snackbar.LENGTH_LONG);
+                snackbar.show();
+
+        TextView textView = findViewById(R.id.textView);
+    }
+}
+
+
+Run it, But make sure you add the textView = findViewById(R.id.textView)
+and that'll be good);
+
+
+
+**CAUTION**
+
+1) make sure when you use: intent.putExtra("EditTextName", name);
+the name ("EditTextName") can be anyname you choose, just make sure you use the same name
+in the activity your trying to launch
+
+2)when your passing the data to the activity   textView3a = findViewById(R.id.textView3);
+
+
+  String name = editText4a.getText().toString();
+
+                Intent intent = new Intent(MainActivity.this, Activity4.class);
+                intent.putExtra("EditTextName", name);
+                startActivity(intent);
+
+
+
+AND make sure you have:
+String name = intent.getStringExtra("EditTextName");**** MAKE SURE YOU HAVE THIS****
+        textView3a = findViewById(R.id.textView3);
+
+        textView3a.setText(name);
