@@ -10,3 +10,18 @@ Do this:
 ;
                 NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);
                 managerCompat.notify(1, builder.build());
+
+Make sure you have what this video link says at the end:  
+https://www.youtube.com/watch?v=4BuRMScaaI4
+
+because if you dont have the thing at oreo and if its like lolipop you need that code
+so it can work:
+
+   //AND CHECK TO MAKE SURE YOU HAVE THIS WITHOUT IT WONT WORK
+// IF YOU HAVE ANYTHING LESS THAN OREO
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel = new NotificationChannel("My Notification","My Notification",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
