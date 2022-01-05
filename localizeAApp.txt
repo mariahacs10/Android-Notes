@@ -11,6 +11,9 @@ Video link: https://www.youtube.com/watch?v=72qURZPIUIA
 In this app its going to change : Snack bar, Toast, button texts, app name
 And any textViews you create.
 
+Localiztion alows you to add differnet lanuages to your app
+instead of just english
+
 
 Step 1. Go into the activty_main.xml file and write:
 
