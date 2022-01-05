@@ -1,0 +1,404 @@
+2:53pm
+
+*1/5/2021*
+
+Video link: https://www.youtube.com/watch?v=72qURZPIUIA
+
+**How to localize an app**
+
+(MAKE SURE ALL THIS CODE IS NOT HARD CODED )
+
+In this app its going to change : Snack bar, Toast, button texts, app name
+And any textViews you create.
+
+
+Step 1. Go into the activty_main.xml file and write:
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/toast_button"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="408dp"
+        android:text="@string/notification_button"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="320dp"
+        android:text="@string/youtube_button"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button1" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="@string/snackbar_button"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+**(This is the basic layout of how the buttons are going to look)**
+
+Step 2. Open the MainActivty and write:
+package com.example.monday_newyear_app;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static final String CHANNEL_ID = "channel_id01";
+    public static final int NOTIFICATION_ID = 1;
+    Button button1a;
+    Button button2a;
+    Button button3a;
+    Button button4a;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        button1a = findViewById(R.id.button1);
+        button2a = findViewById(R.id.button2);
+        button3a = findViewById(R.id.button3);
+        button4a = findViewById(R.id.button4);
+
+        button1a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, NewYearToast.class);
+                startActivity(intent);
+            }
+        });
+
+
+        Button showNotification = findViewById(R.id.button2);
+        showNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Click button to show notification
+                showNotification();
+            }
+        });
+
+        button3a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //url to the youtube link
+                String url = "https://www.youtube.com/watch?v=DOZfajdxsxM";
+                //This is the intent that is going to do an action
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                //This is going to set the data
+                intent.setData(Uri.parse(url));
+                //This is going to start the activity
+                startActivity(intent);
+            }
+        });
+
+
+        button4a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, NewYearSnackBar.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void showNotification() {
+
+        createNotificationChannel();
+
+        //start this MainActivity on by tappin notificatioon
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent mainPIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        //start the Like activity by tapping it
+        //This will create a button inside the notification
+        Intent likeIntent = new Intent(this, LikeActivity.class);
+        likeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent likePIntent = PendingIntent.getActivity(this, 0, likeIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        //This will create a button inside the notification
+        //start the DisLike activity by tapping it
+        Intent disIntent = new Intent(this, DislikeActivity.class);
+        disIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent disPIntent = PendingIntent.getActivity(this, 0, disIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        //creating notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        //icon
+        builder.setSmallIcon(R.drawable.ic_notification);
+        //title
+        builder.setContentTitle("**NOTIFICATION ALERT**");
+        //deseripction
+        builder.setContentText("I have a question, Do you like fortnite Like Or Dislike?");
+        //set proitity
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        builder.setAutoCancel(true);
+
+        builder.setContentIntent(mainPIntent);
+
+        builder.addAction(R.drawable.ic_like, "Like", likePIntent);
+        builder.addAction(R.drawable.ic_dislike, "Dislike", disPIntent);
+
+
+
+        //notification maanger
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    private void createNotificationChannel() {
+        //This is to make sure your on oreo if your not it will fail
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "My Notification";
+            String description = "My notification description";
+
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            notificationChannel.setDescription(description);
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+    }
+}
+(This will create a notification and stuff)
+
+step 3. Create another activity called NewYearToast and open the
+activity_new_year_toast:
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewYearToast">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/happy_jan_3rd_dont_have_to_of_a_tough_week"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+Step 4: Open the NewYearToast and write:
+package com.example.monday_newyear_app;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
+
+public class NewYearToast extends AppCompatActivity {
+
+    TextView textView1a;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_year_toast);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Toast Activity");
+
+        Intent intent = getIntent();
+
+        textView1a = findViewById(R.id.textView1);
+
+        Toast toast  = Toast.makeText(NewYearToast.this, R.string.toast_message, Toast.LENGTH_LONG);
+        toast.show();
+
+        TextView textView = findViewById(R.id.textView1);
+    }
+}
+
+(This will display the toast message)
+
+
+Step 5. Create another activity called NewYearSnackBar and open its
+activity_new-year_snackbar and write:
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewYearSnackBar">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/happy_jan_3rd_and_have_a_great_day"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+Step 6.Open the NewYearSnackBar and write:
+package com.example.monday_newyear_app;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
+
+public class NewYearSnackBar extends AppCompatActivity {
+
+    TextView textView2a;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_year_snack_bar);
+
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Snackbar Activity");
+
+        Intent intent = getIntent();
+
+        textView2a = findViewById(R.id.textView2);
+
+
+        Snackbar snackbar = Snackbar.make(textView2a, R.string.snackbar_message, Snackbar.LENGTH_LONG);
+        snackbar.show();
+
+        TextView textView = findViewById(R.id.textView2);
+    }
+}
+(This will display a normal snackbar)
+
+Step 7. Create another activity called LikeActivity and DislikeActivity
+Go under the xml file for the LikeActivity and write:
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LikeActivity">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/thats_good_you_like_fortnite"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+Then go under the dislike.xml and write:
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DislikeActivity">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wow_thats_sad_you_dont_like_fortnite"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+Step 8. Then make sure your drawable is up to speed and do a 
+like dislIke and notification 
+
+Step 9. 
+
+NOW open the strings.xml (which is under, Values, strings, strings.xml)
+and then at the top to should say "Open editor" click that.
+You should now see the list of, Toast button names SnackBar and notification
+and all the string resources you've created. Hit the globe icon next to the
+minus sign and select the laungage you want, Then you should see the
+laungage next to the Default Value, double click the box and make your 
+translation and it should work.
+
