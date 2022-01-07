@@ -1,0 +1,15 @@
+Work Manger is Guaranteed execution thats defferable.
+
+.Guaranteed constraint aware execution
+.Respectful of system background restrictions
+.Backwards compatible with or without google play services
+.Queryable
+.Chainable
+.Opportunistic
+
+**Core classes**
+
+.Worker (this is the class that does the work)
+.WorkRequest
+   .OneTimeWorkRequest (This is for things to be done once)
+   .PeriodicWorkRequest (This is for recurrig work)
