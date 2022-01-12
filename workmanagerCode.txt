@@ -1,0 +1,166 @@
+
+Video link: https://www.youtube.com/watch?v=regBAqA_gPY
+
+Make SURE for the MyWorker class you have the updated code:
+Data data1 = new Data.Builder().putString("output", "finished output").build();
+
+because the setOutputData is outdated so you NEEDDDDDDD to put this
+
+Open the activty main:
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Perform Action"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+Open the MainActivity:
+package com.example.workmanager_examplevideo;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+
+    public static final String KEY_TASK_DESC ="key_task_desc";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Data data = new Data.Builder()
+                .putString(KEY_TASK_DESC, "Hello the work data is sending")
+                .build();
+
+        final OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(MyWorker.class)
+                .setInputData(data)
+                .build();
+
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WorkManager.getInstance().enqueue(request);
+            }
+        });
+
+        final TextView textView = findViewById(R.id.textView);
+
+        WorkManager.getInstance().getWorkInfoByIdLiveData(request.getId())
+                .observe(this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+
+                        if(workInfo != null) {
+
+                            if(workInfo.getState().isFinished())
+                            {
+                                Data data  = workInfo.getOutputData();
+
+                                String output = data.getString(MyWorker.KEY_TASK_OUTPUT);
+
+                                textView.append(output + "\n");
+                            }
+
+                            String status = workInfo.getState().name();
+
+                            textView.append(status + "\n");
+                        }
+                    }
+                });
+
+    }
+}
+
+Open the MyWorker:
+package com.example.workmanager_examplevideo;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.work.Data;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
+public class MyWorker extends Worker
+{
+    public static final String KEY_TASK_OUTPUT = "key_task_output";
+
+    public MyWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
+
+    @NonNull
+    @Override
+    public  Result doWork() {
+
+       Data data = getInputData();
+       String desc = data.getString(MainActivity.KEY_TASK_DESC);
+       displayNotification("Hello i am your work", desc);
+
+
+        //This is the newest version instead of doing
+        //setOutputData(data1) you do this
+        Data data1 = new Data.Builder().putString("output", "finished output").build();
+
+
+        return Result.success();
+    }
+
+   
+
+
+    private void displayNotification(String task, String desc)
+    {
+        NotificationManager manager =
+                (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel =  new NotificationChannel("test", "I am testing to see if works", NotificationManager.IMPORTANCE_DEFAULT);
+            manager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "test")
+                .setContentTitle(task)
+                .setContentText(desc)
+                .setSmallIcon(R.mipmap.ic_launcher);
+
+        manager.notify(1, builder.build());
+    }
+
+}
+
