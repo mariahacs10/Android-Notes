@@ -13,3 +13,10 @@ Work Manger is Guaranteed execution thats defferable.
 .WorkRequest
    .OneTimeWorkRequest (This is for things to be done once)
    .PeriodicWorkRequest (This is for recurrig work)
+
+Example of PeriodicWorkRequests:
+  
+Periodically backup your data, download fresh content in your app,
+or upload logs to a server.
+
+(Artile https://medium.com/swlh/periodic-tasks-with-android-workmanager-c901dd9ba7bc)
