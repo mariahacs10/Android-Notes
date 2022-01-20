@@ -1,0 +1,50 @@
+1/19/2022
+
+Video link:  https://www.youtube.com/watch?v=fAQKvBHeg_w
+
+Step 1. Go to the build.app gradle file and add your depend:
+
+implementation "android.arch.work:work-runtime:1.0.0-alpha11"
+
+
+Step 2. create a java class called MyWorker, Inside MyWorker add:
+ //This is a default TAG
+ public static final String TAG ="MyWorker";
+
+    public MyWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
+
+	
+    @NonNull
+    @Override
+    public Result doWork() {
+        
+        //Are work is to add two numbers 1 and 2
+        int number1 = 23;
+        int number2 = 26;
+        
+        //Now log the output aka the print out
+        Log.e(TAG, "doWorks addition of two numbers " + String.valueOf(number1 + number2));
+        
+        //Are result is success because are app is running
+        //successfuly
+        return Result.success();
+    }
+
+Step 3. Go Under the MainActivity and write:
+
+       //This is your constraints it can be anything
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        //This is your one time work request
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+               //MAKE SURE YOU SET YOUR CONSTRAINTS
+                .setConstraints(constraints)
+                .build();
+       
+       //This is how you want to enqueue your app
+        WorkManager.getInstance().enqueue(oneTimeWorkRequest);
+
