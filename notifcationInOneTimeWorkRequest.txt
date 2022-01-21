@@ -1,0 +1,73 @@
+*1/21/2022*
+
+So step 1. You need to create a jasva class called MyWorker and write:
+
+
+public class MyWorker extends Worker {
+    public static final String TAG ="MyWorker";
+    public static int number1 = 23;
+    public static int number2 = 26;
+
+
+    public MyWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
+
+
+    @NonNull
+    @Override
+    public Result doWork() {
+
+**       //to call an activity from a non activity class, you have to use getApplicationContext() like the code below
+        
+  ***THIS is important because if you dont want the notifcation to pop up
+      ALL THE TIME you need to call getApplicationContext(), For example
+      if you set a Network constraint the notifcatin will pop up 
+      even if you turn off the internet, BUT When you do this code below it wont
+       pop up if you dont have wifi***
+
+
+         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "My Notification");
+          builder.setContentTitle("Successful " + number1 + " + " + number2 + " = " + String.valueOf(number1 + number2) );
+          builder.setSmallIcon(R.drawable.ic_launcher_background);
+
+          builder.setAutoCancel(true);
+
+         //this lets android know what activity you want it to be called in
+         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
+         managerCompat.notify(1, builder.build());
+
+        return Result.success(); ****
+    }
+}
+
+Step 2. Open up the MainActivity.java file and write this code:
+ @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        //This is to check if your version code is oreo
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel = new NotificationChannel("My Notification","My Notification",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+         
+        //This is your Constraint that will ONLY run if you have wifi
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+         //This is your OneTimeWorkRequest that is only going to do the
+        //work ONCE
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+                //This is to set the constraint if you dont have it
+                //The constraint wont work
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance().enqueue(oneTimeWorkRequest);
+
+Run it and it'll work 🙃
