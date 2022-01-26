@@ -1,0 +1,38 @@
+Step 1. Open teh MainActivity and write:
+
+  Intent intent = new Intent(MainActivity.this, NotifcationMessage.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
+
+
+        button4a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "My Notification");
+                builder.setContentTitle("*NOTIFCATION ALERT click this*");
+                builder.setSmallIcon(R.drawable.ic_launcher_background);
+                builder.setContentIntent(pendingIntent);
+                builder.setAutoCancel(true);
+
+                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(MainActivity.this);
+                managerCompat.notify(1, builder.build());
+            }
+        });
+
+Step 2. Open the activity_main and wwrite:
+  <Button
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="118dp"
+        android:layout_marginBottom="118dp"
+        android:text="@string/notifcation_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+Then your done
