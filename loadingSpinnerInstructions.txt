@@ -1,0 +1,218 @@
+2/1/2022
+
+Step1. Go under the activity_main.xml file and add
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="340dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="107dp"
+        android:layout_marginEnd="22dp"
+        app:layout_constraintEnd_toEndOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+Step 2. Create a activity called MyWorker.java:
+
+package com.example.onetimwork_notification;
+
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
+public class MyWorker extends Worker{
+    //First you want to create some variables
+    public static final String TAG = "MyWorker";
+    public static int number1 = 23;
+    public static int number2 = 26;
+
+    public MyWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
+
+    //This is a doWork method that will display a notifcation
+    //And do a action.
+    @NonNull
+    @Override
+    public Result doWork() {
+        //To call an activity froim a non activity class,
+        //you have to use getApplicationContext
+
+        //This is important because if you dont want the notification
+        // to pop up ALL THE TIME you need to call
+        // getApplicationContext(), for example if you set a
+        // NetWork constraint the notification will pop up
+        // even if you turn off the internet, BUT when you do
+        // this code below it wont pop up if you dont have
+        // wifi
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "My Notification");
+        builder.setContentTitle("Successful " + number1 + " + " + number2 + " = " + String.valueOf(number1 + number2) );
+        builder.setSmallIcon(R.drawable.ic_launcher_background);
+
+        builder.setAutoCancel(true);
+
+        //this lets android know what activity you want it to be called in
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
+        managerCompat.notify(1, builder.build());
+
+        return Result.success();
+
+
+    }
+}
+
+Step 3. Go Create another class called MainActivity2 and under the
+activity_main2 write:
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Task Finished Successfully :)"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="34sp"
+        app:layout_constraintHorizontal_bias="0.535"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.307" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+(Btw you dont need to add nothing to the MainActivity2)
+
+Step 4.Go under the MainActivity and write
+
+package com.example.onetimwork_notification;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class MainActivity extends AppCompatActivity {
+
+    //This is where your progress bar and button1 arfe going to
+    //be called aka these are variables
+    Button button1;
+    ProgressBar progressBar1;
+    int counter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        button1 = findViewById(R.id.button);
+        progressBar1 = findViewById(R.id.progressBar);
+
+        //This will check if you have the level oreo or not
+        //If you dont have oreo it will implement this
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel = new NotificationChannel("My Notification","My Notification",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        //This is your Constraint that will ONLY run if you have wifi
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        //This is your OneTimeWorkRequest that is only going to do the
+        //work ONCE
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+                //This is to set the constraint if you dont have it
+                //The constraint wont work
+                .setConstraints(constraints)
+                .build();
+
+        //this is going to have the logic of the progress bar
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //this is going to launch a activity when it launches
+                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                startActivity(intent);
+
+                //This is going t set the visablility of the progress
+                //bar
+                progressBar1.setVisibility(View.VISIBLE);
+
+                //This is the timer that is going to determine the
+                // time and speed of your loading spinner
+                Timer timer = new Timer();
+
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        counter++;
+
+                        //This is going to set the progress
+                        progressBar1.setProgress(counter);
+
+                        //This is going to determine the speed
+                        if(counter == 90)
+                        {
+                            //When the spinner stops it will cancel
+                            timer.cancel();;
+                        }
+                    }
+                };
+                timer.schedule(timerTask, 90,90);
+            }
+        });
+
+        WorkManager.getInstance().enqueue(oneTimeWorkRequest);
+    }
+}
+
+Then it should work 🥳
+
