@@ -1,0 +1,144 @@
+2/6/2022
+
+Video Link: https://www.youtube.com/watch?v=0jgkQYebYvQ
+
+Step 1. Add your dependenicas.
+
+implementation "android.arch.work:work-runtime:1.0.0-alpha11"
+
+Step 2. Create 3 Activitys called WorkA, WorkB, Work C,
+In WorkA write:
+
+package com.example.chainableworkrequest;
+
+import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
+public class WorkA extends Worker {
+
+    //This is the default TAG
+    private static final String TAG = "WorkA";
+
+    public WorkA(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
+
+    //This is the doWOrk method that will implement
+    //work
+    @NonNull
+    @Override
+    public Result doWork() {
+
+        //This is going to show up in the log cat
+        Log.e(TAG, "dowork: Work A finished");
+        return Result.success();
+    }
+}
+
+
+Step 3. In WorkB write:
+
+package com.example.chainableworkrequest;
+
+import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
+public class WorkB extends Worker {
+
+    //This is the default TAG
+    private static final  String TAG = "WorkB";
+
+    public WorkB(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
+
+    @NonNull
+    @Override
+    public Result doWork() {
+
+        try{
+            Thread.sleep(5000);
+            //This will show up  in the log cat
+            Log.e(TAG, "doWork: Work B finished");
+            //If it is correct and everything goes well it will
+            //succeed
+            return Result.success();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            //If it doesn't work it'll fail
+            return Result.failure();
+        }
+
+    }
+}
+
+Step 4. Go into the WorkC And write
+
+package com.example.chainableworkrequest;
+
+import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
+public class WorkC extends Worker {
+
+    private static final String TAG = "WorkC";
+
+    public WorkC(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
+
+    @NonNull
+    @Override
+    public Result doWork() {
+
+        //This will show up in the log cat
+        Log.e(TAG, "doWork: Work C finished");
+        return Result.success();
+    }
+}
+
+Step 5.Then now go under the main method and write:
+
+package com.example.chainableworkrequest;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+import android.os.Bundle;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //This is your OneTimeWorkRequest it'll do things ONCE
+        //And you have to do this for, WorkA, WorkB and WorkC
+        OneTimeWorkRequest oneTimeWorkRequestA =  new OneTimeWorkRequest.Builder(WorkA.class).build();
+        OneTimeWorkRequest oneTimeWorkRequestB =  new OneTimeWorkRequest.Builder(WorkB.class).build();
+        OneTimeWorkRequest oneTimeWorkRequestC =  new OneTimeWorkRequest.Builder(WorkC.class).build();
+
+        //You have to get a instance of the workManager
+        WorkManager.getInstance()
+                .beginWith(oneTimeWorkRequestA)
+                .then(oneTimeWorkRequestB)
+                .then(oneTimeWorkRequestC)
+                //THEN you need to enqueue your work
+                .enqueue();
+
+    }
+}
