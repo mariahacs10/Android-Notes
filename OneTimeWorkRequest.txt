@@ -20,6 +20,7 @@ Override and implement doWork()
     @Override
     public Result doWork() {
 
+Create Data input object
         Data data = getInputData();
         String desc = data.getString(MainActivity.KEY_TASK_DESC);
         displayNotification("Hello i am your work, ", desc);
@@ -125,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
-
+	
+//Pass the Data object to WorkRequest
         OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(MyWorker.class)
                 .setConstraints(constraints)
                 .setInputData(data)
