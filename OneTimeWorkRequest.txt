@@ -2,16 +2,19 @@
 
 Video link:   https://www.youtube.com/watch?v=hKOKZ0RRgBE
 
-Step 1. Go to the build.app gradle file and add your depend:
+Step 1.  Add WorkManager to your app 
 
 implementation "android.arch.work:work-runtime:1.0.0-alpha11"
 
-Step 2. Go create a myWorker class and write:
+Step 2. Make your first WorkRequest
+Go create a myWorker class and write:
 
 public static final String KEY_TASK_OUTPUT = "key_task_output";
     public MyWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
+
+Override and implement doWork()
 
     @NonNull
     @Override
